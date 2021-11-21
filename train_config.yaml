@@ -1,0 +1,10 @@
+---
+names:
+- with_mask
+- mask_weared_incorrect
+- without_mask
+nc: 3
+path: datasets
+test: images/test
+train: images/train
+val: images/val
