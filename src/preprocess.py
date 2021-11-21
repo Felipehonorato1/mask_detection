@@ -7,6 +7,7 @@ class Preprocessor():
     def __init__(self):
         self.labels = ['with_mask', 'mask_weared_incorrect', 'without_mask']
         self.labels_files = None
+        self.images_files = None
 
         print("Starting preprocessor")
         # percorre pelo annotations
@@ -41,3 +42,6 @@ class Preprocessor():
 
         self.labels_files = [elmt for elmt in os.listdir("datasets/labels/")]
         self.labels_files.sort()
+
+        self.images_files = [elmt for elmt in os.listdir("datasets/images/")]
+        self.images_files.sort()

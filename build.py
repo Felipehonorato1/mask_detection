@@ -12,11 +12,14 @@ def get_build_args():
 
 
 if __name__ == "__main__":
-    downloader = Downloader()
-    downloader.run()
+    #downloader = Downloader()
+    #downloader.run()
 
     processor = Preprocessor()
     processor.run()
 
     create_yaml(train_path="images/train", val_path="images/val",
                 test_path="images/test", labels=processor.labels)
+
+    images_train, images_else, labels_train, labels_else = train_test_split(processor.images_files, processor.labels_files, test_size = 0.3)
+    images_val, images_test, labels_val, labels_test = train_test_split(images_else, labels_else, test_size = 10 / len(images_else))
