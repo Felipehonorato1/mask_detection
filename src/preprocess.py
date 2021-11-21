@@ -34,11 +34,12 @@ class Preprocessor():
                     x_max = int(obj.find('bndbox').findtext('xmax'))
                     y_max = int(obj.find('bndbox').findtext('ymax'))
 
-                    yolo_format = get_yolo(
-                        img_width, img_height, x_min, y_min, x_max, y_max)
+                    yolo_format = get_yolo(img_width, img_height, x_min, y_min,
+                                           x_max, y_max)
 
-                    f.write(str(self.labels.index(obj.findtext('name'))) +
-                            ' ' + ' '.join(map(str, yolo_format)) + '\n')
+                    f.write(
+                        str(self.labels.index(obj.findtext('name'))) + ' ' +
+                        ' '.join(map(str, yolo_format)) + '\n')
 
         self.labels_files = [elmt for elmt in os.listdir("datasets/labels/")]
         self.labels_files.sort()

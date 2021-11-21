@@ -1,4 +1,5 @@
 import yaml
+import os
 
 
 def create_yaml(labels, train_path, val_path, test_path):
@@ -7,7 +8,7 @@ def create_yaml(labels, train_path, val_path, test_path):
         train=train_path,
         val=val_path,
         test=test_path,
-        path="datasets",
+        path="../datasets",
         nc=3,
         names=labels,
     )
@@ -16,3 +17,19 @@ def create_yaml(labels, train_path, val_path, test_path):
         yaml.dump(data, f, explicit_start=True)
 
     return
+
+
+def allocate_split(name, imgs_list, labels_list):
+    # CRIA OS DIRETÓRIOS
+    os.mkdir(f"datasets/images/{name}")
+    os.mkdir(f"datasets/labels/{name}")
+
+    # MOVE AS IMAGENS E OS LABELS
+    [
+        os.replace(f"datasets/images/{img}", f"datasets/images/{name}/{img}")
+        for img in imgs_list
+    ]
+    [
+        os.replace(f"datasets/labels/{label}",
+                   f"datasets/labels/{name}/{label}") for label in labels_list
+    ]
