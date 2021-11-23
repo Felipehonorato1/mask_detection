@@ -7,12 +7,20 @@ class Downloader():
 
     def run(self):
         print("Downloading dataset")
-        os.mkdir("datasets")
-        os.system("gdown --id 1pX51_ZlpXDyxvhaGkPfphOYLGT2rigtd")
-        os.replace("face_mask.zip", "datasets/face_mask.zip")
-        os.system("unzip datasets/face_mask.zip -d datasets/")
-        os.remove("datasets/face_mask.zip")
+        
+        if not os.path.isdir("datasets"):
+            os.mkdir("datasets")
+        
+        if not os.path.isdir("datasets/annotations"):
+            os.system("gdown --id 1pX51_ZlpXDyxvhaGkPfphOYLGT2rigtd")
+            os.replace("face_mask.zip", "datasets/face_mask.zip")
+            os.system("unzip datasets/face_mask.zip -d datasets/")
+            os.remove("datasets/face_mask.zip")
+        else:
+            print("- Dataset already exists")
 
-        print("Cloning YoloV5 repo")
-        os.system("git clone https://github.com/ultralytics/yolov5")
+        if not os.path.isdir("yolov5"):
+            print("Cloning YoloV5 repo")
+            os.system("git clone https://github.com/ultralytics/yolov5")
+            
         print("Done")
