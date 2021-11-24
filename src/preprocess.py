@@ -31,7 +31,7 @@ class Preprocessor():
                 with open(f"datasets/labels/{label_filename}", 'w') as f:
 
                     img_width = int(tree.find("size").findtext("width"))
-                    img_height = int(tree.find("size").findtext("width"))
+                    img_height = int(tree.find("size").findtext("height"))
 
                     for obj in tree.findall('object'):
                         x_min = int(obj.find('bndbox').findtext('xmin'))
