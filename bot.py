@@ -1,5 +1,5 @@
+from pathlib import Path
 from time import sleep
-from yolo_interface import check_masked
 from telegram import Update
 from telegram.ext import (
     Updater,
@@ -8,6 +8,7 @@ from telegram.ext import (
     Filters,
     MessageHandler,
 )
+import yolo_interface
 import threading
 import logging
 import argparse
@@ -86,7 +87,7 @@ def init_watcher(bot: Bot):
     while True:
         try:
             # Asks yolo interface if anything was found and if so, what was found
-            found, msg = check_masked()
+            found, msg = yolo_interface.check_masked()
 
             if found:
                 # Send a message to every registered user
@@ -112,6 +113,7 @@ def parse_args():
     
     # Argument for bot token
     parser.add_argument("token", type=str, help="bot token acquired from @BotFather")
+    parser.add_argument('--source', type=str, default="0", help='file/dir/URL/glob, 0 for webcam')
     
     args = parser.parse_args()
     return args
@@ -124,8 +126,12 @@ def main():
     # Create bot object
     # Must come before running watcher as it is passed as an argument to it
     bot = Bot()
+
+    # Start yolo on separate thread (so we can run other code while it runs in the background)
+    yolo_thread = threading.Thread(target=yolo_interface.start, args=(args.source,), daemon=True)
+    yolo_thread.start()
     
-    # Run watcher on separate thread (so we can run other code while it wathces in the background)
+    # Run watcher on separate thread (so we can run other code while it watches in the background)
     watcher_thread = threading.Thread(target=init_watcher, args=(bot,), daemon=True)
     watcher_thread.start()
     
