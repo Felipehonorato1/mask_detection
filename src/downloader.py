@@ -21,6 +21,6 @@ class Downloader():
 
         if not os.path.isdir("yolov5"):
             print("Cloning YoloV5 repo")
-            os.system("git clone https://github.com/ultralytics/yolov5")
+            os.system("git clone https://github.com/humbertonc/yolov5")
             
         print("Done")
