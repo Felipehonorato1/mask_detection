@@ -10,6 +10,7 @@ from telegram.ext import (
 )
 import threading
 import logging
+import argparse
 
 
 class Bot:
@@ -19,9 +20,9 @@ class Bot:
         # Object which allows control of bot
         self.updater = None
 
-    def run(self):
+    def run(self, token: str):
         # Wrappers for telegram API
-        updater = Updater(token="2121563163:AAFfR67OdkZnbsnlIKoi_WMSMcBXm_OvcyE")
+        updater = Updater(token=token)
         dispatcher = updater.dispatcher
 
         # Set up basic logging (prints bot-related info to console)
@@ -105,7 +106,21 @@ def init_watcher(bot: Bot):
             break
 
 
+# Adds command line arguments to program
+def parse_args():
+    parser = argparse.ArgumentParser()
+    
+    # Argument for bot token
+    parser.add_argument("token", type=str, help="bot token acquired from @BotFather")
+    
+    args = parser.parse_args()
+    return args
+
+
 def main():
+    # Gets command line arguments
+    args = parse_args()
+
     # Create bot object
     # Must come before running watcher as it is passed as an argument to it
     bot = Bot()
@@ -117,7 +132,7 @@ def main():
     # Actually initializes bot on telegram
     # Must come after running watcher because it holds the program (updater.idle())
     # Bot must run on main thread
-    bot.run()
+    bot.run(args.token)
 
 
 if __name__ == "__main__":
