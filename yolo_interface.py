@@ -70,16 +70,25 @@ def start(source: str):
 
 # Checks YOLO output for maskless labels, and if any are found return true and that output
 def check_masked():
+
+    # temp imagem for testing purposes
+    test_image_path = PosixPath("yolov5/data/images/bus.jpg").resolve()
+
     if YOLO_CAPTURE is None:
-        return True, "yolo capture not set"
+        return True, "yolo capture not set", test_image_path
 
-    # TODO deve checar o output do yolo e se houver alguém sem mascara deve
+    # TODO
+    # deve checar o output do yolo e se houver alguém sem mascara deve
     # retornar verdadeiro + uma string dizendo quantas pessoas sem mascara
+    # + salvar uma captura do momento que estava sem máscara e retornar o
+    # endereço dessa imagem
 
-    # TODO retornar também uma captura do momento que estava sem máscara
+    return True, "test message", test_image_path
 
-    return True, "test message"
-
+# Deletes saved image sent to bot
+def image_cleanup(image_path):
+    #TODO
+    return
 
 if __name__ == "__main__":
     init_yolo()

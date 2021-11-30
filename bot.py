@@ -87,7 +87,7 @@ def init_watcher(bot: Bot):
     while True:
         try:
             # Asks yolo interface if anything was found and if so, what was found
-            found, msg = yolo_interface.check_masked()
+            found, msg, img = yolo_interface.check_masked()
 
             if found:
                 # Send a message to every registered user
@@ -96,11 +96,16 @@ def init_watcher(bot: Bot):
                     if bot.updater is None:
                         break
 
-                    # Message contents: whatever check_masked() returns
+                    # Send message
                     bot.updater.bot.send_message(chat_id=chat, text=msg)
+                    # Send picture
+                    bot.updater.bot.send_photo(chat_id=chat, photo=open(img, "rb"))
 
-            # Waits three seconds until next check
-            sleep(3)
+                    # Tells yolo interface picture was sent
+                    yolo_interface.image_cleanup(img)
+
+            # Waits five seconds until next check
+            sleep(5)
 
         # Cleanly exits infinite loop on ctrl c
         except KeyboardInterrupt:
