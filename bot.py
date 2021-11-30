@@ -48,8 +48,9 @@ class Bot:
 
     # Default message on first contact
     def start(self, update: Update, context: CallbackContext):
-        # TODO mensagem mais explicativa
-        response = "Oi!"
+        response =  "Olá, eu sou um robô que monitora "
+        response += "pessoas sem máscara 😷 vistas a partir de sua câmera!\n\n"
+        response += "Para saber como me usar, digite /help." 
 
         context.bot.send_message(chat_id=update.effective_chat.id, text=response)
 
@@ -65,19 +66,25 @@ class Bot:
     def unregister(self, update: Update, context: CallbackContext):
         chat = update.effective_chat.id
 
+        response =  "Você não será mais notificado. "
+        response += "pode levar alguns segundos pra entrar em efeito)"
+
         self.registered_chats.remove(chat)
-        context.bot.send_message(chat_id=chat, text="Removido do registro.")
+        context.bot.send_message(chat_id=chat, text=response)
 
     # User manual
     def help(self, update: Update, context: CallbackContext):
-        # TODO mensagem
-        response = "Mensagem explicando a usar o bot."
+        response =  "Se você deseja receber uma mensagem sempre que uma pessoa sem máscara for detectada "
+        response += "em sua câmera, use o comando /register.\n\n"
+        response += "Caso deseje parar de receber essas mensagens, use o comando /unregister.\n\n"
+        response += "Para exibir essa mensagem novamente, basta digitar /help!\n\n"
+        response += "Simples, não? :)"
 
         context.bot.send_message(chat_id=update.effective_chat.id, text=response)
 
     # Default answer for unknown commands
     def unknown(self, update: Update, context: CallbackContext):
-        response = "Desculpe, não sei como te ajudar. Tente /help."
+        response = "Desculpe, não conheço esse comando. Tente procurar ajuda com /help!"
 
         context.bot.send_message(chat_id=update.effective_chat.id, text=response)
 
