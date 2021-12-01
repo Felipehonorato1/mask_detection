@@ -13,8 +13,8 @@ def get_build_args():
 
 
 if __name__ == "__main__":
-    #downloader = Downloader()
-    #downloader.run()
+    downloader = Downloader()
+    downloader.run()
     print("")
 
     processor = Preprocessor()
