@@ -1,22 +1,32 @@
 from pathlib import PosixPath
+from os import listdir
 from yolov5 import detect
 import io
-# from yolov5.utils.general import LOGGER
-# import logging
 
+no_incorrect = 0
+no_without = 0
 
-# StringIO with yolo output
-# global variable so check_masked has access to it
-YOLO_CAPTURE = None
-
-# TODO
-# Gets a StringIO stream with LOGGER output
 def capture_log():
-    capture_string = io.StringIO()
-    # capture_handler = logging.StreamHandler(capture_string)
-    # capture_handler.setLevel(logging.INFO)
-    # LOGGER.addHandler(capture_string)
-    return capture_string
+    global no_incorrect
+    global no_without
+
+    f = open('bot_msg.txt', 'r')
+    s = f.read()
+    f.close()
+
+    i = s.find('mask_weared_incorrect')
+    if i > 0:
+        no_incorrect = int(s[i - 2])
+    else:
+        no_incorrect = 0
+
+    i = s.find('without_mask')
+    if i > 0:
+        no_without = int(s[i - 2])
+    else:
+        no_without = 0
+
+    return
 
 
 # Initializes yolo
@@ -48,47 +58,36 @@ def init_yolo(source: str):
         nosave=False,
         project=PosixPath("yolov5/runs/detect"),
         save_conf=False,
-        save_crop=False,
+        save_crop_labels=['mask_weared_incorrect', 'without_mask'],
         save_txt=False,
         source=source,
         update=False,
         view_img=False,
         visualize=False,
-        weights=PosixPath("yolov5/yolov5s.pt"),
+        weights=PosixPath("yolov5/runs/train/exp/weights/best.pt"),
     )
 
     # Run detect.py
     detect.main(opt)
 
 
-def start(source: str):
-    # Set YOLO_CAPTURE to LOGGER output
-    YOLO_CAPTURE = capture_log()
-    # Initialize YOLO
-    init_yolo(source)
-
-
 # Checks YOLO output for maskless labels, and if any are found return true and that output
 def check_masked():
+    buffer_incorrect = no_incorrect
+    buffer_without = no_without
 
-    # temp imagem for testing purposes
-    test_image_path = PosixPath("yolov5/data/images/bus.jpg").resolve()
+    capture_log()
 
-    if YOLO_CAPTURE is None:
-        return True, "yolo capture not set", test_image_path
+    img_dir = PosixPath('crops')
+    imgs = []
+    if img_dir.exists():
+        for img in listdir(img_dir):
+            imgs.append(img)
 
-    # TODO
-    # deve checar o output do yolo e se houver alguém sem mascara deve
-    # retornar verdadeiro + uma string dizendo quantas pessoas sem mascara
-    # + salvar uma captura do momento que estava sem máscara e retornar o
-    # endereço dessa imagem
-
-    return True, "test message", test_image_path
-
-# Deletes saved image sent to bot
-def image_cleanup(image_path):
-    #TODO
-    return
+    if buffer_incorrect != no_incorrect or buffer_without != no_without:
+        return True, str(no_incorrect) + ' máscaras vestidas incorretamente. ' + str(no_without) + ' sem máscara.', imgs
+    
+    return False, '', []
 
 if __name__ == "__main__":
     init_yolo()

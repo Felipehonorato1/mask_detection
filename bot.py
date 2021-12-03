@@ -66,8 +66,8 @@ class Bot:
     def unregister(self, update: Update, context: CallbackContext):
         chat = update.effective_chat.id
 
-        response =  "Você não será mais notificado. "
-        response += "pode levar alguns segundos pra entrar em efeito)"
+        response =  "Você não será mais notificado "
+        response += "(pode levar alguns segundos pra entrar em efeito)."
 
         self.registered_chats.remove(chat)
         context.bot.send_message(chat_id=chat, text=response)
@@ -94,7 +94,7 @@ def init_watcher(bot: Bot):
     while True:
         try:
             # Asks yolo interface if anything was found and if so, what was found
-            found, msg, img = yolo_interface.check_masked()
+            found, msg, imgs = yolo_interface.check_masked()
 
             if found:
                 # Send a message to every registered user
@@ -103,13 +103,11 @@ def init_watcher(bot: Bot):
                     if bot.updater is None:
                         break
 
+                    # Send picture
+                    for img in imgs:
+                        bot.updater.bot.send_photo(chat_id=chat, photo=open("crops/" + img, "rb"))
                     # Send message
                     bot.updater.bot.send_message(chat_id=chat, text=msg)
-                    # Send picture
-                    bot.updater.bot.send_photo(chat_id=chat, photo=open(img, "rb"))
-
-                    # Tells yolo interface picture was sent
-                    yolo_interface.image_cleanup(img)
 
             # Waits five seconds until next check
             sleep(5)
@@ -140,7 +138,7 @@ def main():
     bot = Bot()
 
     # Start yolo on separate thread (so we can run other code while it runs in the background)
-    yolo_thread = threading.Thread(target=yolo_interface.start, args=(args.source,), daemon=True)
+    yolo_thread = threading.Thread(target=yolo_interface.init_yolo, args=(args.source,), daemon=True)
     yolo_thread.start()
     
     # Run watcher on separate thread (so we can run other code while it watches in the background)
