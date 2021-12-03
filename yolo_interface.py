@@ -84,10 +84,23 @@ def check_masked():
         for img in listdir(img_dir):
             imgs.append(img)
 
+    msg = ''
+    found = False
     if buffer_incorrect != no_incorrect or buffer_without != no_without:
-        return True, str(no_incorrect) + ' máscaras vestidas incorretamente. ' + str(no_without) + ' sem máscara.', imgs
+        if no_incorrect > 0:
+            found = True
+            msg += str(no_incorrect) + ' pessoa'
+            if no_incorrect > 1:
+                msg += 's'
+            msg += ' com máscara vestida incorretamente. '
+        if no_without > 0:
+            found = True
+            msg += str(no_without) + ' pessoa'
+            if no_without > 1:
+                msg += 's'
+            msg += ' sem máscara.'
     
-    return False, '', []
+    return found, msg, imgs
 
 if __name__ == "__main__":
     init_yolo()
