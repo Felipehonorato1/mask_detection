@@ -44,5 +44,6 @@ Instructions for use this repository:
 ### Usage
 
 ```sh
-python detect.py --weights yolov5/runs/train/exp/weights/best.pt --source 0  --img-size 640 --conf-thres 0.25 --iou-thres 0.45 --device cpu --hide-labels --hide-conf
+cd yolov5/
+python detect.py --weights runs/train/exp/weights/best.pt --source 0  --img-size 640 --conf-thres 0.25 --iou-thres 0.45 --device cpu --hide-labels --hide-conf
 ```
