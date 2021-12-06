@@ -128,3 +128,19 @@ def stratified_sampling(labels_list, labels, test_ratio, verbose=False):
     test_list_img = [name.split(".")[0] + ".png" for name in test_list]
 
     return train_list_img, test_list_img, train_list, test_list
+
+
+def print_label_distribution(labels_list, labels):
+    # num total de cada label
+    num_label = [0 for _ in labels]
+
+    for file in labels_list:
+        with open(f"datasets/labels/{file}", "r") as f:
+            for line in f:
+                label = int(line[0])
+
+                num_label[label] += 1
+
+    # imprime proporção das labels no dataset
+    print("Dataset label distribution:")
+    print(dict(zip(labels, num_label)))
