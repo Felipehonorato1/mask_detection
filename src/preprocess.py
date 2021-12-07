@@ -1,6 +1,7 @@
 from utils.preprocess_utils import get_yolo
 import xml.etree.ElementTree as ET
 import os
+import shutil
 
 
 class Preprocessor():
@@ -25,7 +26,14 @@ class Preprocessor():
             # converte as annotations pra arquivos txt com o formato do yolo
             for element in os.listdir("datasets/annotations/"):
 
+                element_extension = element.split(sep=".")[1]
                 label_filename = element.split(sep=".")[0] + ".txt"
+
+                # se as annotations já são as labels em txt, só copia de uma pasta pra outra
+                if element_extension == "txt":
+                    shutil.copy(element, f"datasets/labels/{label_filename}")
+                    continue
+                
                 tree = ET.parse(f'datasets/annotations/{element}')
 
                 with open(f"datasets/labels/{label_filename}", 'w') as f:
