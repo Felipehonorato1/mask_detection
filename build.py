@@ -30,7 +30,7 @@ if __name__ == "__main__":
         processor.labels_files, processor.labels, test_ratio=0.3)
 
     images_val, images_test, labels_val, labels_test = stratified_sampling(
-        labels_else, processor.labels, test_ratio=10 / len(images_else))
+        labels_else, processor.labels, test_ratio=100 / len(images_else))
     
     allocate_split("train", images_train, labels_train)
     allocate_split("val", images_val, labels_val)
