@@ -37,6 +37,8 @@ def allocate_split(name, imgs_list, labels_list):
 
 
 def stratified_sampling(labels_list, labels, test_ratio, verbose=False):
+    random.seed(123)
+    
     # num total de cada label
     num_label = [0 for _ in labels]
 
@@ -64,7 +66,6 @@ def stratified_sampling(labels_list, labels, test_ratio, verbose=False):
 
     # escolhe uma img da lista levando em conta o alvo de samples
     def weighted_sampling(samples_per_label):
-        random.seed(123)
 
         sample = random.choices(
             sample_pool,
