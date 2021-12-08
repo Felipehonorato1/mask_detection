@@ -43,7 +43,7 @@ def init_yolo(source: str):
         agnostic_nms=False,
         augment=False,
         classes=None,
-        conf_thres=0.45,
+        conf_thres=0.3,
         device="",
         dnn=False,
         exist_ok=False,
