@@ -36,9 +36,12 @@ def allocate_split(name, imgs_list, labels_list):
     ]
 
 
-def stratified_sampling(labels_list, labels, test_ratio, verbose=False):
-    random.seed(123)
+def stratified_sampling(images_list, labels, test_ratio, verbose=False):
+    random.seed(12345)
     
+    # pegar nome das labels de acordo com o nome das imgs
+    labels_list = [name.split(".")[0] + ".txt" for name in images_list]
+
     # num total de cada label
     num_label = [0 for _ in labels]
 
@@ -124,9 +127,16 @@ def stratified_sampling(labels_list, labels, test_ratio, verbose=False):
         print(num_label_test)
         print("")
 
+    # acha arquivo da imagem associado ao arquivo da label
+    def find_img_file(label_file):
+        name = label_file.split(".")[0]
+        for img in images_list:
+            if img.split(".")[0] == name:
+                return img
+
     # pega o nome dos arquivos de img a partir dos nomes dos arquivos de label
-    train_list_img = [name.split(".")[0] + ".png" for name in train_list]
-    test_list_img = [name.split(".")[0] + ".png" for name in test_list]
+    train_list_img = [find_img_file(name) for name in train_list]
+    test_list_img = [find_img_file(name) for name in test_list]
 
     return train_list_img, test_list_img, train_list, test_list
 
