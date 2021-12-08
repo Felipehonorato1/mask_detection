@@ -27,13 +27,13 @@ class Preprocessor():
             for element in os.listdir("datasets/annotations/"):
 
                 element_extension = element.split(sep=".")[1]
-                label_filename = element.split(sep=".")[0] + ".txt"
 
                 # se as annotations já são as labels em txt, só copia de uma pasta pra outra
                 if element_extension == "txt":
-                    shutil.copy(element, f"datasets/labels/{label_filename}")
+                    shutil.copy(f"datasets/annotations/{element}", f"datasets/labels/{element}")
                     continue
                 
+                label_filename = element.split(sep=".")[0] + ".txt"
                 tree = ET.parse(f'datasets/annotations/{element}')
 
                 with open(f"datasets/labels/{label_filename}", 'w') as f:
