@@ -14,8 +14,8 @@ class Downloader():
         if not os.path.isdir("datasets/annotations"):
             os.system("gdown --id 1oAyv_U637hOzyFY34F_VWaWEtg8wYMz3")
             os.replace("mask_data.zip", "datasets/mask_data.zip")
-            os.system("unzip datasets/face_mask.zip -d datasets/")
-            os.remove("datasets/face_mask.zip")
+            os.system("unzip datasets/mask_data.zip -d datasets/")
+            os.remove("datasets/mask_data.zip")
         else:
             print("- Dataset already exists")
 
